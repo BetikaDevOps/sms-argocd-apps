@@ -28,7 +28,7 @@ securityContext: {}
 
 # Liveness and Readiness Probes (Health Checks)
 livenessProbe:
-  enabled: true
+  enabled: false
   httpGet:
     path: /healthz
     port: 8080
@@ -36,7 +36,7 @@ livenessProbe:
   periodSeconds: 10
 
 readinessProbe:
-  enabled: true
+  enabled: false
   httpGet:
     path: /readyz
     port: 8080
@@ -80,9 +80,9 @@ service:
     port: 9090
     targetPort: 9090
 
-# autoscaling:
-#   enabled: true
-#   minReplicas: 1
-#   maxReplicas: 10
-#   targetCPUUtilizationPercentage: 60
-#   targetMemoryUtilizationPercentage: 80
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 80
