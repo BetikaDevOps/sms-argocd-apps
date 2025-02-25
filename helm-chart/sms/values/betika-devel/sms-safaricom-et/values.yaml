@@ -75,7 +75,7 @@ service:
     containerPort: 8080 
     type: ClusterIP
   grpc:
-    enabled: false
+    enabled: true
     name: sms-safaricom-et-grpc
     type: ClusterIP
     containerPort: 9090
