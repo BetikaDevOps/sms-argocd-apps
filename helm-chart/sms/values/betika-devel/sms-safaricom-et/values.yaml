@@ -6,7 +6,7 @@ image:
   pullPolicy: IfNotPresent
   tag: "stable-alpine"
 
-replicaCount: 1
+replicaCount: 4
 autoscaling:
   enabled: false
 
