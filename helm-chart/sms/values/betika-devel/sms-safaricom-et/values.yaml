@@ -6,7 +6,7 @@ image:
   pullPolicy: IfNotPresent
   tag: "stable-alpine"
 
-replicaCount: 4
+replicaCount: 1
 autoscaling:
   enabled: false
 
@@ -75,7 +75,7 @@ service:
     containerPort: 8080 
     type: ClusterIP
   grpc:
-    enabled: true
+    enabled: false
     name: sms-safaricom-et-grpc
     type: ClusterIP
     containerPort: 9090
@@ -84,7 +84,7 @@ service:
 
 autoscaling:
   enabled: true
-  minReplicas: 4
+  minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 80
