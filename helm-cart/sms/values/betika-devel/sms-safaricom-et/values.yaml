@@ -1,0 +1,82 @@
+appName: sms-safaricom-et
+namespace: sms
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "stable-alpine"
+
+replicaCount: 1
+autoscaling:
+  enabled: false
+
+configMap:
+  name: sms-safaricom-et-config
+
+# Pod Security Context
+podSecurityContext: {}
+# podSecurityContext:
+#   runAsUser: 1000
+#   runAsGroup: 3000
+#   fsGroup: 2000
+
+securityContext: {}
+# securityContext:
+#   allowPrivilegeEscalation: false
+#   readOnlyRootFilesystem: false
+#   runAsNonRoot: true
+
+# Liveness and Readiness Probes (Health Checks)
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: /healthz
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: /readyz
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+# Resource Limits (Prevent excessive resource consumption)
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+envVars:
+  GIN_MODE: "debug"
+  SAFARICOM_BASE_URL: "https://bsms-business.safaricom.et/api/v1/"
+  CRON_TIME_INTERVAL_SECS: "1"
+  MAX_IDLE_CONNECTIONS: "100"
+  MAX_IDLE_CONNECTIONS_PER_HOST: "10"
+  MAX_CONNECTIONS_PER_HOST: "100"
+  KEEP_ALIVE_INTERVAL: "30"
+  CONNECT_TIMEOUT: "30"
+  IDLE_CONNECT_TIMEOUT: "30"
+  SENDER_ID: "BETIKA"
+  MAX_NO_OF_TIMES_TO_RUN_ON_EMPTY_QUEUE: "4"
+  PORT: "8080"
+
+service:
+  http:
+    enabled: true
+    name: sms-safaricom-et
+    port: 8080
+    targetPort: 8080
+    type: ClusterIP
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 80

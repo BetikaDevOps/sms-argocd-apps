@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: sms-devel-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: sms-safaricom-et
+          # - name: sportsbook-bet-api
+          # - name: sportsbook-resulting-api
+          #- name: sportsbook-bet-validation-api
+          #- name: resulting-jackpots-engine-java
+  template:
+    metadata:
+      name: "{{name}}-devel"
+    spec:
+      project: sportsbook-devel #sportsbook-devel
+      source:
+        repoURL: "https://github.com/BetikaDevOps/sms-argocd-apps.git"
+        targetRevision: HEAD
+        path: helm-chart/sms
+        helm:
+          valueFiles:
+            - values/betika-devel/sms-safaricom-et/values.yaml #values/devel/{{name}}.yaml 
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: sms
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
